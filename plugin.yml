@@ -1,0 +1,18 @@
+name: "IdiotPluginPack1"
+main: dev.longshotdev.idiot.teamPlugin.IdiotTeamPlugin
+version: 1.0
+api-version: 1.13
+commands:
+   aa:
+      description: Your description
+      usage: /aa
+   createteams:
+      description: create team
+      usage: /createteams {id} {name}
+   getteams:
+      description: get teams
+      usage: /getteams
+   addplayertoteam:
+      description: add player to which team
+      usage: /addplayertoteam {Player} {teamid}
+   
