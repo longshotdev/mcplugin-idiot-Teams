@@ -51,7 +51,13 @@ public class TeamList {
 		}
 		return 0;
 	}
-	
+	public List<String> getTeamNames() {
+		List<String> temp = new ArrayList<String>();
+		teams.forEach((i) -> {
+			temp.add(i.name);
+		});
+		return temp;
+	}
 	public static Team searchWithId(String teamID) {
 		// Loop thru teams array
 				Predicate<Team> equalTo = i -> i.id.equals(teamID);

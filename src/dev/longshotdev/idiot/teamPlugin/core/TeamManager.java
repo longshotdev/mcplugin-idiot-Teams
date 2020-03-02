@@ -1,6 +1,7 @@
 package dev.longshotdev.idiot.teamPlugin.core;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.bukkit.entity.Player;
 
@@ -27,5 +28,8 @@ public class TeamManager {
 	}
 	public Team removePlayerFromTeam(Player player, String teamID) {
 		return teams.removePlayerFromList(player.getUniqueId(), teamID);
+	}
+	public List<String> getTeamNames() {
+		return teams.getTeamNames();
 	}
 }

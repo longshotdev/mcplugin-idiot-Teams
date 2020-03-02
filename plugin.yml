@@ -15,4 +15,33 @@ commands:
    addplayertoteam:
       description: add player to which team
       usage: /addplayertoteam {Player} {teamid}
-   
+   itp:
+      description: tp to friends
+      usage: /itp {friend}
+   tpa:
+      description: Send a teleport request to a player on the server.
+      aliases: [tpr, tprequest]
+      permission: ipp.tpa
+      permission-message: You do not have permission to use this command!
+   tpaccept:
+      description: Accept a teleport request.
+      aliases: accept
+      permission: ipp.tpaccept
+      permission-message: You do not have permission to use this command!
+   tpdeny:
+      description: Deny a teleport request.
+      aliases: deny
+      permission: ipp.tpdeny
+      permission-message: You do not have permission to use this command!
+
+      
+permissions:
+  ipp.tpa:
+    description: Allows you to use the /tpa command.
+    default: true
+  ipp.tpaccept:
+    description: Allows you to use the /tpaccept command.
+    default: true
+  ipp.tpdeny:
+    description: Allows you to use the /tpdeny command.
+    default: true
