@@ -36,6 +36,8 @@ public class IdiotTeamPlugin extends JavaPlugin {
 		this.getCommand("tpa").setExecutor(new ITeleport(this, teamManager, null, teleportManager));
 		this.getCommand("tpa").setTabCompleter(new ITeleportTabCompleter(this, teamManager));
 		this.getCommand("tpaccept").setExecutor(new ITeleportAccept(this, teamManager, teleportManager));
+		this.getCommand("tinfo").setExecutor(new ITeamInfo(this, teamManager, null));
+		this.getCommand("tinfo").setTabCompleter(new ITeamInfoTabCompleter(this, teamManager));
 		// TPA
 	}	
 	/*

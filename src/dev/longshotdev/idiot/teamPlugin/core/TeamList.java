@@ -104,4 +104,14 @@ public class TeamList {
 		});
 		return temp;
 	}
+
+	public Team findTeamByID(String id) {
+		List<Team> t = teams.stream().filter(i -> i.id.equalsIgnoreCase(id)).collect(Collectors.toList());
+		if(t.isEmpty()) {
+			throw new IllegalStateException();
+		}
+		return t.get(0);
+		// TODO Auto-generated method stub
+		
+	}
 }

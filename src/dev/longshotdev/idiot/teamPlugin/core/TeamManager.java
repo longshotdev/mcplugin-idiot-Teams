@@ -56,4 +56,14 @@ public class TeamManager {
 		// TODO Auto-generated method stub
 		return teams.getTeamIds();
 	}
+	public Team getTeamById(String id) {
+		
+		try {
+			return teams.findTeamByID(id);
+		}catch(IllegalStateException e) {
+			return null;
+		}
+		// TODO Auto-generated method stub
+		
+	}
 }

@@ -13,6 +13,9 @@ commands:
    getteams:
       description: get teams
       usage: /getteams
+   tinfo:
+      description: get info on teams
+      usage: /tinfo fuckyou
    addplayertoteam:
       description: add player to which team
       permission: ipp.admin
