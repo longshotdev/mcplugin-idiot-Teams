@@ -1,6 +1,7 @@
 package dev.longshotdev.idiot.teamPlugin.commands;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -27,10 +28,14 @@ public class AddPlayerToTeam implements CommandExecutor {
 		String teamID = args[1];
 		plugin.getLogger().info(String.format("%s", player.getName().toString()));
 		plugin.getLogger().info(String.format("%s", player.getUniqueId()));
+		try {
+			teamManager.addPlayerToTeam(player, sender, teamID, plugin);
+		} catch(IllegalStateException e) {
+			
+		}
+			
+			
 		
-		Team team = teamManager.addPlayerToTeam(player, teamID, plugin);
-		player.sendMessage(String.format("You have been drafted into: Team %s, with %s other people.", team.name, String.valueOf(team.playerList.size())));
-		sender.sendMessage(String.format("%s has been drafted into: Team %s with %s other people.", player.getDisplayName(), team.name, String.valueOf(team.playerList.size())));
         
 		// If the player (or console) uses our command correct, we can return true
         return true;

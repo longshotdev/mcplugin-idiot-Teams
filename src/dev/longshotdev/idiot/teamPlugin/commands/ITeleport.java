@@ -1,14 +1,11 @@
 package dev.longshotdev.idiot.teamPlugin.commands;
 
-import java.util.function.Function;
 
-import org.bukkit.Bukkit;
-import org.bukkit.Material;
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 
 import dev.longshotdev.idiot.teamPlugin.IdiotTeamPlugin;
 import dev.longshotdev.idiot.teamPlugin.core.TeamConfigManager;
@@ -19,13 +16,11 @@ public class ITeleport implements CommandExecutor {
 	
 	private final IdiotTeamPlugin plugin;
 	private final TeamManager teamManager;
-	private final TeamConfigManager config;
 	private final TeleportManager teleportManager;
 	
 	public ITeleport(IdiotTeamPlugin pl, TeamManager tm, TeamConfigManager cfg, TeleportManager tpm) {
 		plugin = pl;
 		teamManager = tm;
-		config = cfg;
 		teleportManager = tpm;
 		
 	}
@@ -40,27 +35,32 @@ public class ITeleport implements CommandExecutor {
 		// Check what type of Command
 		if(sender instanceof Player) {
 			Player player = (Player) sender;
-			Player destination = Bukkit.getPlayer(args[0]);
+			final Player target = plugin.getServer().getPlayer(args[0]);
+			long keepAlive = plugin.getConfig().getLong("keep-alive") * 20;
 			
-			if(destination instanceof Player) {
-				// they're trying to TP
-				
-				
-				teleportManager.teleport(player, destination, plugin.getLogger());
-				
-				
-				
-			} else if(args[0].equalsIgnoreCase("cancel")) {
-				// they cancel all requests to person // needs second argument
-			} else if(args[0].equalsIgnoreCase("accept")) {
-				// they accept request
-			} else if(args[0].equalsIgnoreCase("deny")) {
-				// they deny request 
-			} else {
-				// probably put some random ass shit in here 
+			if (target == null) {
+				sender.sendMessage(ChatColor.RED + "Error: You can only send a teleport request to online players!");
 				return false;
 			}
 			
+			if (target == player) {
+				sender.sendMessage(ChatColor.RED + "Error: You can't teleport to yourself!");
+				return false;
+			}
+			if(!teamManager.findPlayersInTeam(player, target)) {
+				sender.sendMessage(ChatColor.RED + "Error: You can't teleport to the other team!");
+				return false;
+			} else {
+				teleportManager.sendRequest(player, target);
+			}
+			plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
+				public void run() {
+					teleportManager.killRequest(target.getName());
+				}
+			}, keepAlive);
+			
+			teleportManager.addPlayerToCooldown(player);
+
 		}
 
 		

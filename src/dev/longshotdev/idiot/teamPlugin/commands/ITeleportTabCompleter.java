@@ -30,9 +30,6 @@ public class ITeleportTabCompleter implements TabCompleter {
              for(Player player : plugin.getServer().getOnlinePlayers()) {
             	 commands.add(player.getName());
              }
-             commands.add("accept");
-             commands.add("cancel");
-             commands.add("deny");
             StringUtil.copyPartialMatches(args[0], commands, completions);
         } else if (args.length == 2) {
                     if(args[0].equals("cancel")) {

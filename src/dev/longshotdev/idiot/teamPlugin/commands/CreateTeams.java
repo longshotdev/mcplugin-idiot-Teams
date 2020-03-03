@@ -3,7 +3,7 @@ package dev.longshotdev.idiot.teamPlugin.commands;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-
+import org.bukkit.ChatColor;
 
 import dev.longshotdev.idiot.teamPlugin.IdiotTeamPlugin;
 import dev.longshotdev.idiot.teamPlugin.core.Team;
@@ -27,7 +27,13 @@ public class CreateTeams implements CommandExecutor {
 		String teamName = args[1];
 		
 		Team teamFactory = new Team(teamName, teamID);
-		teams.addTeam(teamFactory);
+		try {
+			teams.addTeam(teamFactory);
+			sender.sendMessage(ChatColor.GREEN + "Created Team:" + ChatColor.GOLD + teamName);
+		} catch(IllegalStateException e) {
+			sender.sendMessage(ChatColor.RED + "Error: Maybe there is a team with this name / ID?");
+		};
+
 		return true;
 	}
 

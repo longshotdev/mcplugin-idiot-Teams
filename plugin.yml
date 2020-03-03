@@ -8,16 +8,15 @@ commands:
       usage: /aa
    createteams:
       description: create team
+      permission: ipp.admin
       usage: /createteams {id} {name}
    getteams:
       description: get teams
       usage: /getteams
    addplayertoteam:
       description: add player to which team
+      permission: ipp.admin
       usage: /addplayertoteam {Player} {teamid}
-   itp:
-      description: tp to friends
-      usage: /itp {friend}
    tpa:
       description: Send a teleport request to a player on the server.
       aliases: [tpr, tprequest]
@@ -45,3 +44,8 @@ permissions:
   ipp.tpdeny:
     description: Allows you to use the /tpdeny command.
     default: true
+  ipp.admin:
+     description: be admin
+     default: true
+    
+depend: [ProtocolLib]

@@ -33,7 +33,7 @@ public class AddPlayerToTeamTabCompleter implements TabCompleter {
              }
             StringUtil.copyPartialMatches(args[0], commands, completions);
         } else if (args.length == 2) {
-                    for(String teamName : teamManager.getTeamNames()) {
+                    for(String teamName : teamManager.getTeamIDs()) {
                     	commands.add(teamName);
                     }
             StringUtil.copyPartialMatches(args[1], commands, completions);

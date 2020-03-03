@@ -6,6 +6,8 @@ import java.util.UUID;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
+import org.bukkit.entity.Player;
+
 import dev.longshotdev.idiot.teamPlugin.IdiotTeamPlugin;
 
 public class TeamList {
@@ -20,8 +22,16 @@ public class TeamList {
 		return teams;
 	}
 	public ArrayList<Team> addTeam(Team team) {
-		teams.add(team);
-		return teams;
+		Predicate<Team> equalTo = i -> i.id.equals(team.id);
+		List<Team> teamw = teams.stream().filter(equalTo).collect(Collectors.toList());
+		if(!teamw.isEmpty()) {
+			throw new IllegalStateException();
+		} else {
+			System.out.println("YSKETNIGERS");
+			teams.add(team);
+			return teams;
+		}
+
 	}
 	public int getNumTeams() {
 		return teams.size();
@@ -70,5 +80,28 @@ public class TeamList {
 					throw new IllegalStateException();
 				}
 				return team.get(0);
+	}
+
+	public boolean searchWithPlayerUUID(Player p1, Player p2) {
+		// TODO Auto-generated method stub
+		
+		// find teams that user is in
+		List<Team> team = teams.stream().filter(i -> i.playerList.contains(p1.getUniqueId())).collect(Collectors.toList());
+		if(team.isEmpty()) {
+			return false;
+		}
+		if(team.get(0).playerList.contains(p2.getUniqueId())) {
+			return true;
+		};
+		return false;
+		
+	}
+
+	public List<String> getTeamIds() {
+		List<String> temp = new ArrayList<String>();
+		teams.forEach((i) -> {
+			temp.add(i.id);
+		});
+		return temp;
 	}
 }
