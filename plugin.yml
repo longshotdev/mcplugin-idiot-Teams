@@ -13,6 +13,9 @@ commands:
    getteams:
       description: get teams
       usage: /getteams
+   tinfo:
+      description: get info on teams
+      usage: /tinfo fuckyou
    addplayertoteam:
       description: add player to which team
       permission: ipp.admin
@@ -32,6 +35,8 @@ commands:
       aliases: deny
       permission: ipp.tpdeny
       permission-message: You do not have permission to use this command!
+   basic:
+      description: fuck off fag
 
       
 permissions:

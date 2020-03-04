@@ -96,12 +96,29 @@ public class TeamList {
 		return false;
 		
 	}
-
+	public Team searchWithPlayerUUID(Player p1) {
+		List<Team> team = teams.stream().filter(i -> i.playerList.contains(p1.getUniqueId())).collect(Collectors.toList());
+		if(team.isEmpty()) {
+			return null;
+		} else {
+			return team.get(0);
+		}
+	}
 	public List<String> getTeamIds() {
 		List<String> temp = new ArrayList<String>();
 		teams.forEach((i) -> {
 			temp.add(i.id);
 		});
 		return temp;
+	}
+
+	public Team findTeamByID(String id) {
+		List<Team> t = teams.stream().filter(i -> i.id.equalsIgnoreCase(id)).collect(Collectors.toList());
+		if(t.isEmpty()) {
+			throw new IllegalStateException();
+		}
+		return t.get(0);
+		// TODO Auto-generated method stub
+		
 	}
 }
