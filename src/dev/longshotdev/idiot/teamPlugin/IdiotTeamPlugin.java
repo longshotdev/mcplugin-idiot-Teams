@@ -74,7 +74,15 @@ public class IdiotTeamPlugin extends JavaPlugin {
 		this.getCommand("tinfo").setTabCompleter(new ITeamInfoTabCompleter(this, teamManager));
 		// TPA
 		// ProtoCol
-		
+		PacketType packetToListen = PacketType.Play.Client.POSITION;
+		protocolManager.addPacketListener(new PacketAdapter(this, ListenerPriority.HIGHEST, packetToListen) {
+			 @Override
+			    public void onPacketReceiving(PacketEvent event) {
+			        Player player = event.getPlayer();
+			        PacketContainer packet = event.getPacket();
+			        teamManager.updateGlow1(player);
+			    }
+		});
 	}	
 	/*
 	 * On Disable Event

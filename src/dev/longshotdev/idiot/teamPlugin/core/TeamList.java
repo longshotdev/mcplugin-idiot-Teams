@@ -96,7 +96,14 @@ public class TeamList {
 		return false;
 		
 	}
-
+	public Team searchWithPlayerUUID(Player p1) {
+		List<Team> team = teams.stream().filter(i -> i.playerList.contains(p1.getUniqueId())).collect(Collectors.toList());
+		if(team.isEmpty()) {
+			return null;
+		} else {
+			return team.get(0);
+		}
+	}
 	public List<String> getTeamIds() {
 		List<String> temp = new ArrayList<String>();
 		teams.forEach((i) -> {

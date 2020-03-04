@@ -3,6 +3,7 @@ package dev.longshotdev.idiot.teamPlugin.core;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -43,22 +44,6 @@ public class TeamManager {
 		}
 	}
 	
-	public void setGlow(Player player) {
-		// doSomething
-		System.out.println(protocolManager);
-		PacketContainer packet = protocolManager.createPacket(PacketType.Play.Server.ENTITY_METADATA);
-	    packet.getIntegers().write(0, player.getEntityId()); //Set packet's entity id
-	    WrappedDataWatcher watcher = new WrappedDataWatcher(); //Create data watcher, the Entity Metadata packet requires this
-	    Serializer serializer = Registry.get(Byte.class); //Found this through google, needed for some stupid reason
-	    watcher.setEntity(player); //Set the new data watcher's target
-	    watcher.setObject(0, serializer, (byte) (0x40)); //Set status to glowing, found on protocol page
-	    packet.getWatchableCollectionModifier().write(0, watcher.getWatchableObjects()); //Make the packet's datawatcher the one we created
-	    try {
-	    	protocolManager.sendServerPacket(player, packet);
-	    } catch (InvocationTargetException e) {
-	        e.printStackTrace();
-	    }
-	}
 	public ArrayList<Team> getTeams() {
 		return teams.getTeams();
 	}
@@ -108,5 +93,77 @@ public class TeamManager {
 		// TODO Auto-generated method stub
 		
 	}
+	@Deprecated
+	public void updateGlow(Player player) {
+		double maxDist = 20;
+		//System.out.println("got into function.");
+		
+	    for (UUID p : teams.searchWithPlayerUUID(player).playerList) {
+	    	Player other = Bukkit.getPlayer(p);
+            if(other != player){
+            	System.out.println("got into 1st");
+           
+                 if(other.getWorld() == player.getWorld()){
+                	 System.out.println("got into 2st");
+                      if (other.getLocation().distance(player.getLocation()) <= maxDist) {
+                    	  System.out.println("got into 3st");
+                            // get team
+                    	  	if(teams.searchWithPlayerUUID(player) != null) {
+                    	  		System.out.println("got into 4st");
+                    	  		PacketContainer packet = protocolManager.createPacket(PacketType.Play.Server.ENTITY_METADATA);
+                    		    packet.getIntegers().write(0, player.getEntityId()); //Set packet's entity id
+                    		    WrappedDataWatcher watcher = new WrappedDataWatcher(); //Create data watcher, the Entity Metadata packet requires this
+                    		    Serializer serializer = Registry.get(Byte.class); //Found this through google, needed for some stupid reason
+                    		    watcher.setEntity(player); //Set the new data watcher's target
+                    		    watcher.setObject(0, serializer, (byte) (0x40)); //Set status to glowing, found on protocol page
+                    		    packet.getWatchableCollectionModifier().write(0, watcher.getWatchableObjects()); //Make the packet's datawatcher the one we created
+                    		    try {
+                    		    	player.sendMessage(String.format("Send this to %s", other.getName()));
+                    		    		protocolManager.sendServerPacket(other, packet);
+                    		    } catch (InvocationTargetException e) {
+                    		    	System.out.println("ERROREWOKJRLWELTHEJWLGJAHL");
+                    		        e.printStackTrace();
+                    		    }
+                    	  	} else {
+                    	  		// could not have team
+                    	  	}
+       
+                         }
+                      }
+                   }
+         }
+
+	}
+	public void updateGlow1(Player player) {
+		List<Player> playersInRange = getPlayersWithin(player, 20);
+		for(Player playerIR : playersInRange) {
+			if(teams.searchWithPlayerUUID(player, playerIR)) {
+				PacketContainer packet = protocolManager.createPacket(PacketType.Play.Server.ENTITY_METADATA);
+    		    packet.getIntegers().write(0, player.getEntityId()); //Set packet's entity id
+    		    WrappedDataWatcher watcher = new WrappedDataWatcher(); //Create data watcher, the Entity Metadata packet requires this
+    		    Serializer serializer = Registry.get(Byte.class); //Found this through google, needed for some stupid reason
+    		    watcher.setEntity(player); //Set the new data watcher's target
+    		    watcher.setObject(0, serializer, (byte) (0x40)); //Set status to glowing, found on protocol page
+    		    packet.getWatchableCollectionModifier().write(0, watcher.getWatchableObjects()); //Make the packet's datawatcher the one we created
+    		    try {
+    		    	player.sendMessage(String.format("Send this to %s", playerIR.getName()));
+    		    		protocolManager.sendServerPacket(playerIR, packet);
+    		    } catch (InvocationTargetException e) {
+    		    	System.out.println("ERROREWOKJRLWELTHEJWLGJAHL");
+    		        e.printStackTrace();
+    		    }
+			}
+		}
+	}
+	private List<Player> getPlayersWithin(Player player, int distance) {
+		  List<Player> res = new ArrayList<Player>();
+		  int d2 = distance * distance;
+		  for (Player p : Bukkit.getServer().getOnlinePlayers()) {
+		    if (p.getWorld() == player.getWorld() && p.getLocation().distanceSquared(player.getLocation()) <= d2) {
+		      res.add(p);
+		    }
+		  }
+		  return res;
+		}
 }
 
