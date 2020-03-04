@@ -35,6 +35,8 @@ commands:
       aliases: deny
       permission: ipp.tpdeny
       permission-message: You do not have permission to use this command!
+   basic:
+      description: fuck off fag
 
       
 permissions:
