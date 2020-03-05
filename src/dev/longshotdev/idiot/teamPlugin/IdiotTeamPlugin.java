@@ -26,7 +26,7 @@ import dev.longshotdev.idiot.teamPlugin.core.TeamManager;
 import dev.longshotdev.idiot.teamPlugin.core.TeleportManager;
 
 public class IdiotTeamPlugin extends JavaPlugin {
-	
+	// TODO: Fix Public / private issue
 	/*
 	 * this might look like shit code but its a HACK:
 	 * 
@@ -45,7 +45,7 @@ public class IdiotTeamPlugin extends JavaPlugin {
 	 * */
 	private ProtocolManager protocolManager;
 	private TeamList teams;
-	private TeamManager teamManager;
+	public TeamManager teamManager;
 	private TeleportManager teleportManager;
 	private ConfigManager cfgManager;
 	
@@ -57,13 +57,14 @@ public class IdiotTeamPlugin extends JavaPlugin {
 	public void onEnable() {
 		protocolManager = ProtocolLibrary.getProtocolManager();
 		teams = new TeamList();
-		teamManager = new TeamManager(teams, this, protocolManager);
+		teamManager = new TeamManager(teams, this, protocolManager, cfgManager);
 		teleportManager = new TeleportManager(this);
 		cfgManager = new ConfigManager(this);
 		cfgManager.loadConfig();
+		cfgManager.loadTeams();
 		// Register command
 		this.getCommand("aa").setExecutor(new CommandTest());
-		this.getCommand("createteams").setExecutor(new CreateTeams(teams));
+		this.getCommand("createteams").setExecutor(new CreateTeams(teamManager));
 		this.getCommand("getteams").setExecutor(new GetTeams(this, teamManager));
 		this.getCommand("addplayertoteam").setExecutor(new AddPlayerToTeam(this, teamManager));
 		this.getCommand("addplayertoteam").setTabCompleter(new AddPlayerToTeamTabCompleter(this, teamManager));
@@ -75,6 +76,7 @@ public class IdiotTeamPlugin extends JavaPlugin {
 		// TPA
 		// ProtoCol
 		PacketType packetToListen = PacketType.Play.Client.POSITION;
+		if(this.getConfig().getBoolean("team-Glow")) {
 		protocolManager.addPacketListener(new PacketAdapter(this, ListenerPriority.HIGHEST, packetToListen) {
 			 @Override
 			    public void onPacketReceiving(PacketEvent event) {
@@ -83,6 +85,8 @@ public class IdiotTeamPlugin extends JavaPlugin {
 			        teamManager.updateGlow1(player);
 			    }
 		});
+		
+		}
 	}	
 	/*
 	 * On Disable Event

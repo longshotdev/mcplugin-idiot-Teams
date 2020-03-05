@@ -31,10 +31,12 @@ public class TeamManager {
 	private TeamList teams;
 	private IdiotTeamPlugin plugin;
 	private ProtocolManager protocolManager;
-	public TeamManager(TeamList t, IdiotTeamPlugin pl, ProtocolManager po) {
+	private ConfigManager cfg;
+	public TeamManager(TeamList t, IdiotTeamPlugin pl, ProtocolManager po, ConfigManager cfgm) {
 		plugin = pl;
 		teams = t;
 		protocolManager = po;
+		cfg = cfgm;
 		System.out.println(po);
 		/*
 		 * this was the reason 
@@ -43,9 +45,16 @@ public class TeamManager {
 			throw new IllegalStateException("KSGLEKS;RHGLKJWERSHLKJSERWHGBLIWERTHBLEWRTBHULBB");
 		}
 	}
-	
+	public boolean isPlayerInAnyTeams(Player p) {
+		return teams.isPlayerInAnyTeams(p);
+	}
 	public ArrayList<Team> getTeams() {
 		return teams.getTeams();
+	}
+	public TeamList addTeam(Team t) {
+		teams.addTeam(t);
+		cfg.saveTeams(teams);
+		return teams;
 	}
 	public int getNumTeams() {
 		return teams.getNumTeams();
@@ -67,6 +76,7 @@ public class TeamManager {
 			} else {
 				player.sendMessage(String.format("You have been drafted into: Team %s, with %s other people.", team.name, String.valueOf(team.playerList.size())));
 			}
+			cfg.saveTeams(teams);
 			return team;
 
 	}
@@ -74,6 +84,7 @@ public class TeamManager {
 		return teams.searchWithPlayerUUID(p1, p2);
 	}
 	public Team removePlayerFromTeam(Player player, String teamID) {
+		cfg.saveTeams(teams);
 		return teams.removePlayerFromList(player.getUniqueId(), teamID);
 	}
 	public List<String> getTeamNames() {
@@ -118,7 +129,7 @@ public class TeamManager {
                     		    watcher.setObject(0, serializer, (byte) (0x40)); //Set status to glowing, found on protocol page
                     		    packet.getWatchableCollectionModifier().write(0, watcher.getWatchableObjects()); //Make the packet's datawatcher the one we created
                     		    try {
-                    		    	player.sendMessage(String.format("Send this to %s", other.getName()));
+                    		    	// player.sendMessage(String.format("Send this to %s", other.getName()));
                     		    		protocolManager.sendServerPacket(other, packet);
                     		    } catch (InvocationTargetException e) {
                     		    	System.out.println("ERROREWOKJRLWELTHEJWLGJAHL");

@@ -33,7 +33,7 @@ public class ITeamInfo implements CommandExecutor {
 		 * */
 		// argument checking
 		System.out.println("DOING SOMETHING ");
-		if(args.length <= 1) {
+		if(args.length < 1) {
 			sender.sendMessage(ChatColor.RED + "Didn't recieve ID, did you forget to supply it?");
 			return true;
 		}

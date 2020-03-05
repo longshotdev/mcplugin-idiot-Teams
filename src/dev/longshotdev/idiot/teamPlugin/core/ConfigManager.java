@@ -1,6 +1,14 @@
 package dev.longshotdev.idiot.teamPlugin.core;
 
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+import java.util.UUID;
+
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
+
 import dev.longshotdev.idiot.teamPlugin.IdiotTeamPlugin;
 public class ConfigManager {
 	
@@ -17,5 +25,36 @@ public class ConfigManager {
 		plugin.getConfig().addDefault("team-Glow", true);
 		plugin.getConfig().options().copyDefaults(true);
 		plugin.saveConfig();
+	}
+	public void saveTeams( TeamList teamList ) {
+		for(Team team : teamList.getTeams()) {
+			List<UUID> playerList = team.playerList;
+			
+			List<String> temp = new ArrayList<String>();
+			
+			for(UUID uid : playerList) {
+				temp.add(uid.toString());
+			}
+			String prefix = "Teams."+team.id;
+			plugin.getConfig().set(prefix+".name", team.name);
+			plugin.getConfig().set(prefix+".Players", temp);
+
+		};
+		plugin.getConfig().options().copyDefaults(true);
+		plugin.saveConfig();
+	}
+	@SuppressWarnings("unchecked")
+	public TeamList loadTeams() {
+		// this gets all team IDs
+		TeamList teamss = new TeamList();
+		Set<String> teams = plugin.getConfig().getConfigurationSection("Teams").getKeys(false);
+		for(String teamID : teams) {
+			Team tempTeam = new Team(teamID, plugin.getConfig().getString(String.format("Teams.%s.name", teamID)));
+			// Read values inside The team
+			List<String> playersList = (List<String>) plugin.getConfig().getList(String.format("Teams.%s.Players", teamID));
+			playersList.forEach(i -> tempTeam.addPlayer(UUID.fromString(i)));
+			teamss.addTeam(tempTeam);
+		}
+		return teamss;
 	}
 }

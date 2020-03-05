@@ -25,6 +25,10 @@ public class AddPlayerToTeam implements CommandExecutor {
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         plugin.getLogger().info(String.format("%s arg1; \n %s arg2", args[0], args[1]));
 		Player player = Bukkit.getPlayerExact(args[0]);
+		if(player == null) {
+			sender.sendMessage("USER IS NEIN NOT IN ZE SERVER RETARDO");
+			return false;
+		}
 		String teamID = args[1];
 		plugin.getLogger().info(String.format("%s", player.getName().toString()));
 		plugin.getLogger().info(String.format("%s", player.getUniqueId()));

@@ -13,9 +13,8 @@ import dev.longshotdev.idiot.teamPlugin.IdiotTeamPlugin;
 public class TeamList {
 	
 	private static ArrayList<Team> teams = new ArrayList<Team>();
-	
+	private ConfigManager cfg;
 	public TeamList() {
-		
 	}
 	
 	public ArrayList<Team> getTeams() {
@@ -29,6 +28,7 @@ public class TeamList {
 		} else {
 			System.out.println("YSKETNIGERS");
 			teams.add(team);
+			
 			return teams;
 		}
 
@@ -81,7 +81,13 @@ public class TeamList {
 				}
 				return team.get(0);
 	}
-
+	public boolean isPlayerInAnyTeams(Player p) {
+		List<Team> team = teams.stream().filter(i -> i.playerList.contains(p.getUniqueId())).collect(Collectors.toList());
+		if(team.isEmpty()) {
+			return false;
+		}
+		return true;
+	}
 	public boolean searchWithPlayerUUID(Player p1, Player p2) {
 		// TODO Auto-generated method stub
 		
