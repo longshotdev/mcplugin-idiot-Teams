@@ -2,6 +2,7 @@
 <!-- Configuration of the Ant build system to generate a Jar file -->
 <project name="IdiotTeamPlugin" default="CreateJar">
   <target name="CreateJar" description="Create Jar file">
+  	 <mkdir dir="./target/classes/"/>
         <jar jarfile="./server/plugins/Plugin.jar" basedir="./target/classes/" includes="**/*">
         	<fileset file="plugin.yml"></fileset>
         </jar>
