@@ -28,7 +28,9 @@ public class ITeleportTabCompleter implements TabCompleter {
         
         if (args.length == 1) {
              for(Player player : plugin.getServer().getOnlinePlayers()) {
-            	 commands.add(player.getName());
+            	 if(teamManager.findPlayersInTeam((Player) sender, player)) {
+            		 commands.add(player.getName());
+            	 }
              }
             StringUtil.copyPartialMatches(args[0], commands, completions);
         } else if (args.length == 2) {

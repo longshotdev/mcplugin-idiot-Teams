@@ -29,7 +29,9 @@ public class AddPlayerToTeamTabCompleter implements TabCompleter {
         
         if (args.length == 1) {
              for(Player player : plugin.getServer().getOnlinePlayers()) {
-            	 commands.add(player.getName());
+            	 if(!teamManager.isPlayerInAnyTeams(player)) {
+                	 commands.add(player.getName());
+            	 }
              }
             StringUtil.copyPartialMatches(args[0], commands, completions);
         } else if (args.length == 2) {

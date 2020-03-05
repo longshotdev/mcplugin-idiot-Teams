@@ -45,7 +45,9 @@ public class TeamManager {
 			throw new IllegalStateException("KSGLEKS;RHGLKJWERSHLKJSERWHGBLIWERTHBLEWRTBHULBB");
 		}
 	}
-	
+	public boolean isPlayerInAnyTeams(Player p) {
+		return teams.isPlayerInAnyTeams(p);
+	}
 	public ArrayList<Team> getTeams() {
 		return teams.getTeams();
 	}
