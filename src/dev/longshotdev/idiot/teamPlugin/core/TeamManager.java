@@ -28,7 +28,7 @@ import dev.longshotdev.idiot.teamPlugin.IdiotTeamPlugin;
 
 public class TeamManager {
 	
-	private TeamList teams;
+	public TeamList teams;
 	private IdiotTeamPlugin plugin;
 	private ProtocolManager protocolManager;
 	private ConfigManager cfg;
@@ -55,6 +55,10 @@ public class TeamManager {
 		teams.addTeam(t);
 		cfg.saveTeams(teams);
 		return teams;
+	}
+	public Team findPlayerInTeam(Player p) {
+		return teams.searchWithPlayerUUID(p);
+		
 	}
 	public int getNumTeams() {
 		return teams.getNumTeams();
@@ -145,6 +149,7 @@ public class TeamManager {
          }
 
 	}
+	@Deprecated
 	public void updateGlow1(Player player) {
 		List<Player> playersInRange = getPlayersWithin(player, 20);
 		for(Player playerIR : playersInRange) {
@@ -157,7 +162,6 @@ public class TeamManager {
     		    watcher.setObject(0, serializer, (byte) (0x40)); //Set status to glowing, found on protocol page
     		    packet.getWatchableCollectionModifier().write(0, watcher.getWatchableObjects()); //Make the packet's datawatcher the one we created
     		    try {
-    		    	player.sendMessage(String.format("Send this to %s", playerIR.getName()));
     		    		protocolManager.sendServerPacket(playerIR, packet);
     		    } catch (InvocationTargetException e) {
     		    	System.out.println("ERROREWOKJRLWELTHEJWLGJAHL");

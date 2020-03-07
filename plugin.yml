@@ -37,6 +37,8 @@ commands:
       permission-message: You do not have permission to use this command!
    basic:
       description: fuck off fag
+   ieditconfig:
+      description: edit player config
 
       
 permissions:

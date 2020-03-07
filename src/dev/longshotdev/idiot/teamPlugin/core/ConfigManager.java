@@ -7,13 +7,19 @@ import java.util.Set;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
+import org.bukkit.scoreboard.Scoreboard;
+import org.bukkit.scoreboard.ScoreboardManager;
 
 import dev.longshotdev.idiot.teamPlugin.IdiotTeamPlugin;
 public class ConfigManager {
 	
 	private final IdiotTeamPlugin plugin;
-	
+	private ScoreboardManager manager = Bukkit.getScoreboardManager();
+	private Scoreboard board = manager.getNewScoreboard();
+
+
 	public ConfigManager(IdiotTeamPlugin pl) {
 		plugin = pl;
 	}
@@ -23,10 +29,12 @@ public class ConfigManager {
 		plugin.getConfig().addDefault("tm", 30);
 		plugin.getConfig().addDefault("team-PVP", true);
 		plugin.getConfig().addDefault("team-Glow", true);
+		plugin.getConfig().createSection("Teams");
 		plugin.getConfig().options().copyDefaults(true);
 		plugin.saveConfig();
 	}
 	public void saveTeams( TeamList teamList ) {
+		System.out.println("HAHAHAHAHAH");
 		for(Team team : teamList.getTeams()) {
 			List<UUID> playerList = team.playerList;
 			
@@ -47,14 +55,22 @@ public class ConfigManager {
 	public TeamList loadTeams() {
 		// this gets all team IDs
 		TeamList teamss = new TeamList();
-		Set<String> teams = plugin.getConfig().getConfigurationSection("Teams").getKeys(false);
+		ConfigurationSection Tteams = plugin.getConfig().getConfigurationSection("Teams");
+		if(Tteams == null) {
+			plugin.getConfig().createSection("Teams");
+			return null;
+		}
+		Set<String> teams = Tteams.getKeys(false);
 		for(String teamID : teams) {
 			Team tempTeam = new Team(teamID, plugin.getConfig().getString(String.format("Teams.%s.name", teamID)));
 			// Read values inside The team
 			List<String> playersList = (List<String>) plugin.getConfig().getList(String.format("Teams.%s.Players", teamID));
 			playersList.forEach(i -> tempTeam.addPlayer(UUID.fromString(i)));
+			org.bukkit.scoreboard.Team team = board.registerNewTeam(teamID);
 			teamss.addTeam(tempTeam);
 		}
+		
+
 		return teamss;
 	}
 }
