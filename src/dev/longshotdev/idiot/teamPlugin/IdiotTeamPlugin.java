@@ -3,10 +3,18 @@ package dev.longshotdev.idiot.teamPlugin;
 import java.lang.reflect.InvocationTargetException;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scoreboard.DisplaySlot;
+import org.bukkit.scoreboard.Objective;
+import org.bukkit.scoreboard.Score;
+import org.bukkit.scoreboard.Scoreboard;
+import org.bukkit.scoreboard.ScoreboardManager;
 
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.ProtocolLibrary;
@@ -48,7 +56,7 @@ public class IdiotTeamPlugin extends JavaPlugin {
 	public TeamManager teamManager;
 	private TeleportManager teleportManager;
 	private ConfigManager cfgManager;
-	
+	public IdiotTeamPlugin plugin = this;
 
 	/*
 	 * On Enable Event
@@ -57,11 +65,11 @@ public class IdiotTeamPlugin extends JavaPlugin {
 	public void onEnable() {
 		protocolManager = ProtocolLibrary.getProtocolManager();
 		teams = new TeamList();
-		teamManager = new TeamManager(teams, this, protocolManager, cfgManager);
-		teleportManager = new TeleportManager(this);
 		cfgManager = new ConfigManager(this);
 		cfgManager.loadConfig();
 		cfgManager.loadTeams();
+		teamManager = new TeamManager(teams, this, protocolManager, cfgManager);
+		teleportManager = new TeleportManager(this);
 		// Register command
 		this.getCommand("aa").setExecutor(new CommandTest());
 		this.getCommand("createteams").setExecutor(new CreateTeams(teamManager));
@@ -73,21 +81,13 @@ public class IdiotTeamPlugin extends JavaPlugin {
 		this.getCommand("tpaccept").setExecutor(new ITeleportAccept(this, teamManager, teleportManager));
 		this.getCommand("tinfo").setExecutor(new ITeamInfo(this, teamManager, null));
 		this.getCommand("tinfo").setTabCompleter(new ITeamInfoTabCompleter(this, teamManager));
+		this.getCommand("ieditconfig").setExecutor(new IEditConfig());
+		this.getCommand("ieditconfig").setTabCompleter(new IEditConfigTabCompleter(this, teamManager));
+		Bukkit.getPluginManager().registerEvents(new IdiotEventListeners(this, teamManager, protocolManager), this);
 		// TPA
 		// ProtoCol
-		PacketType packetToListen = PacketType.Play.Client.POSITION;
-		if(this.getConfig().getBoolean("team-Glow")) {
-		protocolManager.addPacketListener(new PacketAdapter(this, ListenerPriority.HIGHEST, packetToListen) {
-			 @Override
-			    public void onPacketReceiving(PacketEvent event) {
-			        Player player = event.getPlayer();
-			        PacketContainer packet = event.getPacket();
-			        teamManager.updateGlow1(player);
-			    }
-		});
-		
-		}
-	}	
+	}
+	
 	/*
 	 * On Disable Event
 	 * */
